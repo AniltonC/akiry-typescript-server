@@ -1,0 +1,22 @@
+import { Knex } from "knex";
+
+
+export async function up(knex: Knex): Promise<void> {
+    return await knex.schema.createTable('location_items', table => {
+        table.increments('id').primary();
+        table.integer('location_id')
+            .notNullable()
+            .references('id')
+            .inTable('locations');
+        table.integer('item_id')
+            .nullable()
+            .references('id')
+            .inTable('items');
+    });
+}
+
+
+export async function down(knex: Knex): Promise<void> {
+    return await knex.schema.dropTable('location_items');
+}
+
