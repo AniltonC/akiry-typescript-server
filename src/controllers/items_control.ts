@@ -1,4 +1,4 @@
-/* import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { internalServerError } from '../database/utils';
 import { itemModel } from '../models/item';
 
@@ -12,4 +12,4 @@ const listItems = async (req: Request, res: Response) => {
 
 export const itemsController = {
     listItems
-} */
+}

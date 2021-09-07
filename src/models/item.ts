@@ -1,4 +1,4 @@
-/* import knex from "../database/connection"
+import knex from "../database/connection"
 import PORT from "../server";
 
 export type Item = {
@@ -21,4 +21,4 @@ const listItems = async () => {
 
 export const itemModel = {
     listItems
-} */
+}
