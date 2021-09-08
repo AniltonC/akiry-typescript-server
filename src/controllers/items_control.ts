@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { badRequest, internalServerError, notFound, validateNumber } from '../database/utils';
 import { Item, itemModel } from '../models/item';
 
-const listItems = async (req: Request, res: Response) => {
+const listItems = async (_req: Request, res: Response) => {
+    
     return itemModel.listItems()
         .then(items => {
             res.json(items)
