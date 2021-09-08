@@ -1,3 +1,4 @@
+import { Request } from "express";
 import knex from "../database/connection"
 
 export type Location = {
@@ -13,12 +14,50 @@ export type Location = {
 }
 
 
-const listLocations = async () => {
+const listLocations = async (req: Request) => {
+    const query = req.query;
+
+    const parsedItems: Number[] = query.items ? String(query.items)
+        .split(',')
+        .map(item => {
+            return Number(item.trim());
+        })
+        : [];
+
+    return await knex('locations')
+        .join('location_items', 'locations.id', '=', 'location_items.location_id')
+        .where((location) => {
+            if (query.items) {
+                location.whereIn('location_items.item_id', parsedItems)
+            }
+            if (query.city) {
+                location.where('city', String(query.city))
+            }
+            if (query.uf) {
+                location.where('uf', String(query.uf))
+            }
+
+        })
+        .distinct()
+        .select('locations.*')
+
 }
 
 const getLocation = async (id: number) => {
     const location = await knex('locations').where('id', id).first();
-    return location as Location;
+
+    if (!location)
+        return location;
+
+    const items = await knex('items')
+        .join('location_items', 'items.id', '=', 'location_items.item_id')
+        .where('location_items.location_id', id)
+        .select('items.title');
+
+    return {
+        location,
+        items
+    };
 }
 
 const insertLocation = async (location: Location, items: Array<number>) => {

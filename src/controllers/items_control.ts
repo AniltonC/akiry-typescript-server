@@ -14,7 +14,7 @@ const getItem = async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
 
     if (!validateNumber(id)) {
-        return badRequest(res, 'Invalid ID.');
+        return badRequest(res, 'Invalid id');
     }
 
     return itemModel.getItem(id)
@@ -34,7 +34,7 @@ const insertItem = async (req: Request, res: Response) => {
             return badRequest(res, "Invalid item")
 
         if (!item.title)
-            return badRequest(res, "Missing item tile")
+            return badRequest(res, "Missing item title")
     }
 
     const item = req.body as Item;

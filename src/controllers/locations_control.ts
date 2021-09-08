@@ -4,9 +4,11 @@ import { badRequest, internalServerError, notFound, validateNumber } from "../da
 import { Location, locationModel } from "../models/location";
 
 const listLocations = async (req: Request, res: Response) => {
-    return locationModel.listLocations()
+    return locationModel.listLocations(req)
         .then(locations => {
-            res.json(locations);
+            if (locations)
+                return res.json(locations);
+            return notFound(res);
         })
         .catch(err => internalServerError(res, err))
 }
@@ -19,9 +21,9 @@ const getLocation = async (req: Request, res: Response) => {
     }
 
     return locationModel.getLocation(id)
-        .then(location => {
-            if (location) {
-                return res.json(location);
+        .then(location_items => {
+            if (location_items) {
+                return res.json(location_items);
             }
             return notFound(res);
         })
