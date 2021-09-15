@@ -22,4 +22,8 @@ locationsRouter.post('/', celebrate({
     })
 }, { abortEarly: false }), locationsController.insertLocation);
 
+locationsRouter.put('/:id',locationsController.updateLocation);
+
+locationsRouter.delete('/:id',locationsController.deleteLocation);
+
 export default locationsRouter;

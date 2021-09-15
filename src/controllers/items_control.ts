@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { badRequest, internalServerError, notFound, validateNumber } from '../database/utils';
+import { badRequest, internalServerError, notFound, validateNumber } from './utils';
 import { Item, itemModel } from '../models/item';
 
 const listItems = async (_req: Request, res: Response) => {

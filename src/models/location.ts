@@ -81,8 +81,54 @@ const insertLocation = async (location: Location, items: Array<number>) => {
     return location;
 }
 
+const updateLocation = async (id: number, updtLocation: Location, updtItems: Array<number>) => {
+    const transaction = await knex.transaction();
+
+
+    const location = await transaction('locations').where({ id: id }).first();
+    if (!location)
+        return location;
+
+
+    const location_id = await transaction('locations').where({ id: id }).update(updtLocation);
+
+    await transaction('location_items')
+        .where('location_id', id)
+        .del();
+
+    const location_items = updtItems.map((item_id: number) => {
+        return {
+            item_id,
+            location_id
+        }
+    })
+    await transaction('location_items').insert(location_items);
+
+    const items = await transaction('items')
+        .join('location_items', 'items.id', '=', 'location_items.item_id')
+        .where('location_items.location_id', id)
+        .select('items.title');
+
+    await transaction.commit();
+
+    return {
+        location,
+        items
+    };
+}
+
+const deleteLocation = async (id: number) => {
+    const output =
+        await knex('locations').where('id', id).del() &&
+        await knex('location_items').where('location_id', id).del();
+
+    return output;
+}
+
 export const locationModel = {
     listLocations,
     getLocation,
-    insertLocation
+    insertLocation,
+    updateLocation,
+    deleteLocation
 }
